@@ -43,7 +43,7 @@ main() {
     declare -r LIST_FILE="${LIST_FILE_DIR%/}/goto-dirs.list"
     # Actions are reserved words, don't allow setting them as alias
     declare -a -r ACTIONS=("add" "delete" "list" "usage" "help" "version")
-    # Vector to load aliasses into (from the LIST_FILE)
+    # Vector to load aliases into (from the LIST_FILE)
     declare -A ENTRIES
 
     # When called from the goto() function in goto.bash
@@ -128,7 +128,7 @@ usage() {
            Delete an alias.
  
        list [<mode>]
-           Print a list of all defined aliasses with corresponding destinations.
+           Print a list of all defined aliases with corresponding destinations.
            When specifying mode 'completion' only output a list of aliases;
            this is used to define bash completion in 'goto'.
 
