@@ -95,23 +95,31 @@ function __goto_complete() {
 	#completions+=("${actions[@]}")
 	
     else
-	# Has to be second argument for an action, and
-	# only for delete listing aliases makes sense.
-	if [[ "${preceeding_word}" == "delete" ]]; then
-	    completions+=($(goto list "completion"))
-	fi
-
-	## TODO if action is 'add' then complete for system dirs
+	case "${preceeding_word}" in
+	    # If action delete, list defined aliases
+	    "delete")
+		completions+=($(goto list "completion"))	
+		;;
+	    # Nothing to be completed for the other cases.
+	    "add" | "list" | "usage" | "help" | "version" )
+		;;
+	    # For the case 'goto add <alias> >x<'
+	    # when we are at >x< then complete with system directories
+	    *)
+		if (( ${COMP_CWORD} == 3 )) && [[ "${COMP_WORDS[1]}" == "add" ]]; then
+		    COMPREPLY=($(compgen -d "${current_word}"))
+		fi
+	esac	
     fi
 
     
-    COMPREPLY=($(compgen -W '"${completions[@]}"' -- "${current_word}"))
+    COMPREPLY+=($(compgen -W '"${completions[@]}"' -- "${current_word}"))
 }
 
 
 # Enable <tab> completion for the 'goto' function
 #
-complete -F __goto_complete goto
+complete -o nospace -F __goto_complete goto
 # -F function call with:
 #   $1 - name of the command
 #   $2 - word being completed
