@@ -48,8 +48,9 @@
 function goto() {
     local goto_script
     local path
-    
-    goto_script="${HOME}"/Programming/Projects/goto/goto-script.bash
+
+    # !The location for the script gets configured by the Makefile
+    goto_script=@@goto-script-location@@
     readonly goto_script
 
     # For a normal action just call the goto-script; when jumping to a
@@ -99,6 +100,8 @@ function __goto_complete() {
 	if [[ "${preceeding_word}" == "delete" ]]; then
 	    completions+=($(goto list "completion"))
 	fi
+
+	## TODO if action is 'add' then complete for system dirs
     fi
 
     

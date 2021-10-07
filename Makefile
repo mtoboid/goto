@@ -37,27 +37,16 @@ libexecdir = $(prefix)/libexec
 datadir = $(prefix)/share
 bashdir = $(datadir)/bash
 
-# Targets
-script_file := "goto-script.bash"
-function_file := "goto-function.bash"
-
-script_file_dest := $(libexecdir)/$(script_file)
-function_file_dest := $(bashdir)/$(function_file)
-
-
 # File to which the source command for the goto-function.bash is written
 # in Debian /etc/bash.bashrc is a system-wide bashrc
 bashrc = /etc/bash.bashrc
 
-# DESTDIR
-# /usr/local/libexec
-# /usr/local/share/bash
-# /etc/bash.bashrc
+# Targets
+# 1) goto-script.bash -> libexec/goto-script
+# 2) goto-function.unconfigured.bash (set path to goto-script)-> goto-function.bash
+#    -> share/bash/goto-function.bash
+# 3) edit bashrc to source goto-function.bash
 
-
-# 1) Put goto-script into /usr/local/libexec
-# 2) Put goto-function into /usr/local/share/bash
-# 3) Add a line to /etc/bash.bashrc to source /usr/local/share/bash/goto-script
 
 .PHONY: all
 all: install
@@ -67,14 +56,25 @@ all: install
 install: install_scripts install_edit_bashrc
 
 .PHONY: install_scripts
-install_scripts: installdirs
-	$(INSTALL_PROGRAM) $(script_file) $(DESTDIR)$(script_file_dest)
-	$(INSTALL_DATA) $(function_file) $(DESTDIR)$(function_file_dest)
+install_scripts: installdirs goto-script.bash goto-function.bash
+	$(INSTALL_PROGRAM) goto-script.bash $(DESTDIR)$(libexecdir)/goto-script
+	$(INSTALL_DATA) goto-function.bash $(DESTDIR)$(bashdir)/goto-function.bash
 
 .PHONY: install_edit_bashrc
 install_edit_bashrc: $(DESTDIR)$(bashrc) install_scripts
 	@echo "Writing source entry to $(DESTDIR)$(bashrc)"
-	@$(EDIT_BASHRC) write $(DESTDIR)$(function_file_dest) $(DESTDIR)$(bashrc)
+	@$(EDIT_BASHRC) write $(DESTDIR)$(bashdir)/goto-function.bash $(DESTDIR)$(bashrc)
+
+
+# configure
+.PHONY: configure
+configure: goto-function.bash
+
+# configure the goto-function and insert the path to the goto-script
+goto-function.bash: goto-function.unconfigured.bash
+	@sed 's#@@goto-script-location@@#$(DESTDIR)$(libexecdir)/goto-script#' $< > $@
+	@echo "Wrote $@"
+
 
 # uninstall
 # (FIXME: at the moment will leave some leftover dirs, and a non-standard
@@ -84,13 +84,13 @@ uninstall: uninstall_scripts uninstall_edit_bashrc
 
 .PHONY: uninstall_scripts
 uninstall_scripts:
-	rm $(DESTDIR)$(script_file_dest)
-	rm $(DESTDIR)$(function_file_dest)
+	rm $(DESTDIR)$(libexecdir)/goto-script
+	rm $(DESTDIR)$(bashdir)/goto-function.bash
 
 .PHONY: uninstall_edit_bashrc
 uninstall_edit_bashrc:
 	@echo "Removing source entry from $(DESTDIR)$(bashrc)"
-	@$(EDIT_BASHRC) delete $(DESTDIR)$(function_file_dest) $(DESTDIR)$(bashrc)
+	@$(EDIT_BASHRC) delete $(DESTDIR)$(bashdir)/goto-function.bash $(DESTDIR)$(bashrc)
 
 
 # create necessary directories
@@ -105,3 +105,9 @@ $(DESTDIR)$(bashrc):
 	@echo "Creating file: $(DESTDIR)$(bashrc)"
 	$(MKDIR_P) $(dir $(DESTDIR)$(bashrc))
 	touch $(DESTDIR)$(bashrc)
+
+
+# clean
+.PHONY: clean
+clean:
+	rm goto-function.bash
