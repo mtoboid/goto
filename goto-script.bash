@@ -68,6 +68,7 @@ main() {
     shift
     self+=("${action}")
 
+    ensure_list_file_exists
     
     case "$action" in
 	"add")
@@ -495,6 +496,7 @@ get_entries_from_list_file() {
 #
 is_reserved_action() {
     local word
+    local action
     
     if [[ -z "${1:+x}" ]]; then
 	error "No word provided"
