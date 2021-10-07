@@ -54,7 +54,7 @@ main() {
     readonly path_bashrc="$3"
     
     # Text to be inserted to (or deleted from) bashrc
-    bashrc_lines+=("# Make the 'goto' function available system-wide")
+    bashrc_lines+=("# Make the 'goto' function available in a terminal shell.")
     bashrc_lines+=("source ${path_goto_script}")
 
     if [[ ! -f "${path_bashrc}" ]]; then
