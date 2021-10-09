@@ -7,7 +7,11 @@
   can be used to quickly jump to anz directory in the filesystem.
   
 * Installing
-
+  On a modern Debian system just use
+  #+begin_src sh
+    sudo make install
+  #+end_src
+  
 * Uninstalling
 
 * License
