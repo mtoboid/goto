@@ -1,0 +1,11 @@
+#+LANGUAGE: en
+#+TITLE: goto
+#+AUTHOR: Tobias Marczewski (mtoboid)
+
+* About
+
+* Installing
+
+* Uninstalling
+
+* License
