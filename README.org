@@ -3,7 +3,9 @@
 #+AUTHOR: Tobias Marczewski (mtoboid)
 
 * About
-
+  ~goto~ is a small Bash script & function to maintain a list of aliases that
+  can be used to quickly jump to anz directory in the filesystem.
+  
 * Installing
 
 * Uninstalling
