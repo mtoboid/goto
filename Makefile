@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 #
-SHELL = /usr/bin/sh
+SHELL = /bin/sh
 
 INSTALL = install
 INSTALL_PROGRAM = $(INSTALL)
