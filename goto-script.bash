@@ -38,7 +38,7 @@ set -o pipefail
 
 
 main() {
-    declare -r DEBUG=true
+    declare -r DEBUG=false
     declare -r LIST_FILE_DIR="${HOME}/.config"
     declare -r LIST_FILE="${LIST_FILE_DIR%/}/goto-dirs.list"
     # Actions are reserved words, don't allow setting them as alias
@@ -346,10 +346,19 @@ list_defined_aliases() {
     # List aliases
     #
     case "${mode}" in
-	"normal")	    
-	    printf " %10s  %s\n\n" "Alias" "Destination"
+	"normal")
+	    # determine the length (in characters) of the longest alias
+	    declare -i maxlength=$(expr length "[Alias]")
 	    for key in "${!ENTRIES[@]}"; do
-		printf " %10s  %s\n" "${key}" "${ENTRIES[${key}]}"
+		declare -i len=$(expr length "${key}")
+		if (( ${len} > ${maxlength} )); then
+		    maxlength=${len}
+		fi
+	    done
+	    # print the list to screen
+	    printf "\n %-*s  %s\n" ${maxlength} "[Alias]" "[Destination]"
+	    for key in "${!ENTRIES[@]}"; do
+		printf " %-*s  %s\n" ${maxlength} "${key}" "${ENTRIES[${key}]}"
 	    done
 	    ;;
 	"completion")
