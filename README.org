@@ -4,7 +4,7 @@
 
 * About
   ~goto~ is a small Bash script & function to maintain a list of aliases that
-  can be used to quickly jump to anz directory in the filesystem.
+  can be used to quickly jump to any directory in the filesystem.
   
 * Installing
   On a modern Debian system just use
@@ -13,5 +13,19 @@
   #+end_src
   
 * Uninstalling
-
+  The Makefile provides ~uninstall~, and if you provide the exact same
+  parameters as for ~install~,
+  #+begin_src sh
+    sudo make uninstall
+  #+end_src
+  should remove all files.
+  + catch 1 :: folders created during installation will not be removed at the
+               moment (e.g. =/usr/local/share/bash=).
+  + catch 2 :: the 'source' line will be removed from the bashrc, but one empty
+               line that is inserted during 'install' is currently not being
+               removed.
+    
 * License
+  (C) 2021 Tobias Marczewski
+  SPDX: [[https://spdx.org/licenses/GPL-3.0-or-later.html][GPL-3.0-or-later]]
+
