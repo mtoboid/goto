@@ -45,14 +45,18 @@ main() {
     declare -a -r ACTIONS=("add" "delete" "list" "usage" "help" "version")
     # Vector to load aliases into (from the LIST_FILE)
     declare -A ENTRIES
+    # Name of the program and action (for error output)
+    declare -a self=()
 
-    # When called from the goto() function in goto.bash
-    # use the name goto as self
+    # When the environment variable '__funcname' is set, use this as program name.
+    # (Otherwise use the script name)
+    # This is introduced to enable the wrapper function goto() in
+    # goto-function(.unconfigured).bash to set the name for user interaction.
     #
-    if [[ -n "${self:+x}" ]]; then
-	declare -a self=("$self")
+    if [[ -n "${__funcname+x}" ]]; then
+	self+=("${__funcname}")
     else
-	declare -a self=("${0##*/}")
+	self+=("${0##*/}")
     fi
         
     local action

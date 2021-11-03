@@ -58,10 +58,10 @@ function goto() {
     #
     case "$1" in
 	"add" | "delete" | "list" | "usage" | "help" | "version")
-	    (self="${FUNCNAME[0]}" ${goto_script} "$@")
+	    (export __funcname="${FUNCNAME[0]}"; ${goto_script} "$@")
 	    ;;
 	*)
-	    path=$(self="${FUNCNAME[0]}" ${goto_script} "$@")
+	    path=$(export __funcname="${FUNCNAME[0]}"; ${goto_script} "$@")
 	    cd "${path}"
 	    ;;
     esac
