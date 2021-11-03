@@ -142,11 +142,12 @@ usage() {
 
    ALIAS:
 
-       When the second argument is a defined alias, output the path to the
-       destination for that alias.   
+       When the second argument is a defined alias, jump to the location for
+       which the alias was defined.
 
 
-       For bug reports, comments and contributions go to XXX TODO
+       For bug reports, comments and contributions go to
+       https://github.com/mtoboid/goto
    
 EOF
 
