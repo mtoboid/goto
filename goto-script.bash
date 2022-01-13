@@ -347,6 +347,8 @@ list_defined_aliases() {
 	return 2
     fi
 
+    # Sorted key enries
+    declare -a sorted_keys=($(printf "%s\n" "${!ENTRIES[@]}" | sort))
 
     # List aliases
     #
@@ -362,7 +364,7 @@ list_defined_aliases() {
 	    done
 	    # print the list to screen
 	    printf "\n %-*s  %s\n" ${maxlength} "[Alias]" "[Destination]"
-	    for key in "${!ENTRIES[@]}"; do
+	    for key in "${sorted_keys[@]}"; do
 		printf " %-*s  %s\n" ${maxlength} "${key}" "${ENTRIES[${key}]}"
 	    done
 	    ;;
